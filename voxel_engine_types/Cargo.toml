@@ -1,0 +1,7 @@
+[package]
+name = "voxel_engine_types"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+wings.workspace = true

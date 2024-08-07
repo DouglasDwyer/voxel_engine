@@ -1,0 +1,29 @@
+[workspace]
+members = [
+    ".",
+    "voxel_engine_types"
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+
+[patch.crates-io]
+wings_macro = { path = "../wings/wings_macro" }
+
+[workspace.dependencies]
+
+# Internal dependencies
+voxel_engine = { path = ".", version = "0.1.0" }
+voxel_engine_types = { path = "voxel_engine_types", version = "0.1.0" }
+
+# External dependencies
+wings = { version = "0.1.1", default-features = false }
+
+[package]
+name = "voxel_engine"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+voxel_engine_types.workspace = true
