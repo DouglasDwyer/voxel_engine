@@ -10,5 +10,7 @@ forced-target = "wasm32-wasip1"
 crate-type = [ "cdylib" ]
 
 [dependencies]
+egui_demo_lib.workspace = true
+egui_wings.workspace = true
 voxel_engine.workspace = true
 wings.workspace = true

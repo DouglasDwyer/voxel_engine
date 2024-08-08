@@ -138,6 +138,29 @@ fn proc_exit(_: i32) {
     unreachable!()
 }
 
+/// Temporarily yield execution of the calling thread.
+///
+/// # Note
+///
+/// This is similar to sched_yield in POSIX.
+#[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview111sched_yield17hd8d25f53c5eb182fE"]
+fn sched_yield() -> i32 {
+    0
+}
+
+/// Write high-quality random data into a buffer.
+///
+/// # Parameters
+///
+/// - `buf`: The buffer to fill with random data.
+/// - `buf_len`: The length of the `buf` buffer.
+#[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview110random_get17hb1719c7a33a320e4E"]
+unsafe fn random_get(buf: *mut u8, buf_len: usize) -> i32 {
+    // todo: ask host for randomness
+    std::slice::from_raw_parts_mut(buf, buf_len).fill(0);
+    0
+}
+
 impl_trap_for_funcs!(
     /// Read command-line argument data.
     ///
@@ -188,6 +211,7 @@ impl_trap_for_funcs!(
     /// # Note
     ///
     /// This is similar to `clock_gettime` in POSIX. The result is stored in `offset0`.
+    #[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview114clock_time_get17h35e4b5c443113208E"]
     fn clock_time_get(id: i32, precision: i64, offset0: i32) -> i32;
 
     /// Provide file advisory information on a file descriptor.
@@ -689,21 +713,6 @@ impl_trap_for_funcs!(
     ///
     /// sig: The signal condition to trigger.
     fn proc_raise(sig: i32) -> i32;
-
-    /// Temporarily yield execution of the calling thread.
-    ///
-    /// # Note
-    ///
-    /// This is similar to sched_yield in POSIX.
-    fn sched_yield() -> i32;
-
-    /// Write high-quality random data into a buffer.
-    ///
-    /// # Parameters
-    ///
-    /// - `buf`: The buffer to fill with random data.
-    /// - `buf_len`: The length of the `buf` buffer.
-    fn random_get(buf: i32, buf_len: i32) -> i32;
 
     /// Accept a new incoming connection.
     ///
