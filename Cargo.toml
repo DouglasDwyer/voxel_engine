@@ -1,6 +1,7 @@
 [workspace]
 members = [
     ".",
+    "example_mod",
     "voxel_engine_types"
 ]
 
@@ -8,17 +9,14 @@ members = [
 edition = "2021"
 version = "0.1.0"
 
-[patch.crates-io]
-wings_macro = { path = "../wings/wings_macro" }
-
 [workspace.dependencies]
-
 # Internal dependencies
+example_mod = { path = "example_mod", version = "0.1.0" }
 voxel_engine = { path = ".", version = "0.1.0" }
 voxel_engine_types = { path = "voxel_engine_types", version = "0.1.0" }
 
 # External dependencies
-wings = { version = "0.1.1", default-features = false }
+wings = { version = "0.1.3", default-features = false }
 
 [package]
 name = "voxel_engine"

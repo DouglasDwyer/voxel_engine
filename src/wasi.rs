@@ -81,7 +81,7 @@ pub unsafe extern "C" fn environ_sizes_get(offset0: *mut usize, offset1: *mut us
 /// # Safety
 /// 
 /// The inputs must point to valid buffers and the buffer lengths must be valid.
-#[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview18fd_write17h7577541065884288E"]
+#[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview18fd_write17h594e175a549b8f2dE"]
 pub unsafe extern "C" fn fd_write(fd: i32, mut ciov_buf: *const Ciovec, mut ciov_buf_len: usize, nwritten: *mut usize) -> i32 {
     static mut BUFFER: String = String::new();
 

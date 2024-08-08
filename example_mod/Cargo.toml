@@ -1,0 +1,14 @@
+cargo-features = ["per-package-target"]
+
+[package]
+name = "example_mod"
+edition.workspace = true
+version.workspace = true
+forced-target = "wasm32-wasip1"
+
+[lib]
+crate-type = [ "cdylib" ]
+
+[dependencies]
+voxel_engine.workspace = true
+wings.workspace = true

@@ -1,15 +1,22 @@
 use wings::*;
 
+/// Facilitates access to frame and tick timing data.
+pub mod timing;
+
+/// Marks systems that will be instantiated on the game client.
 #[derive(Copy, Clone, Debug)]
 #[export_type]
 pub struct Client;
 
+/// Marks systems that will be instantiated on the game server.
 #[derive(Copy, Clone, Debug)]
 #[export_type]
 pub struct Server;
 
+/// Allows for writing log messages to the game's console output.
 #[system_trait(host)]
 pub trait Logger: 'static {
+    /// Prints a log message with the specified level.
     #[global(global_log)]
     fn log(&self, level: LogLevel, message: &str);
 }
