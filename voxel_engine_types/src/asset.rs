@@ -26,6 +26,8 @@ pub enum Asset {
 #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum ImageFormat {
+    /// The image is encoded as a JPEG.
+    Jpeg,
     /// The image is encoded as a PNG.
     Png
 }

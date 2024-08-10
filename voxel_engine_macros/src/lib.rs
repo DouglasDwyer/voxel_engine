@@ -20,6 +20,7 @@ impl AssetEncoder for VoxelAssetEncoder {
 
     fn encode(extension: &str, _: &Table, data: Vec<u8>) -> Result<Option<Self::Target>, WassetError> {
         match extension {
+            "jpg" | "jpeg" => Ok(Some(Asset::Image { data, format: ImageFormat::Jpeg })),
             "png" => Ok(Some(Asset::Image { data, format: ImageFormat::Png })),
             "toml" | "txt" => Ok(Some(Asset::Text {
                 value: String::from_utf8(data).map_err(WassetError::from_serialize)?

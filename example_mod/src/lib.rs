@@ -29,7 +29,7 @@ impl HelloClient {
         .show(&context, |ui| {
             ui.label("Welcome to here.");
             ui.text_edit_singleline(&mut self.text_box);
-            Image::new(self.ctx.get::<dyn AssetManager>().get_ui_texture(assets::MEME))
+            Image::new(self.ctx.get::<dyn AssetManager>().get_ui_texture(assets::TEXTURE))
                 .max_size(egui::vec2(200.0, 200.0))
                 .ui(ui);
         });
