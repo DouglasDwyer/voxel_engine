@@ -51,7 +51,6 @@ impl dyn AssetManager {
     }
 
     /// Shorthand for `try_get_ui_texture(id).unwrap()`.
-    #[cfg(feature = "egui")]
     pub fn get_ui_texture(&self, id: AssetId) -> UiTextureIndex {
         self.try_get_ui_texture(id).expect("Failed to load image asset.")
     }
@@ -60,7 +59,7 @@ impl dyn AssetManager {
 /// The allocated index of a UI texture. Only valid for a single frame;
 /// `AssetManager::get_ui_texture` should be called to get a new index
 /// for every usage.
-#[derive(Copy, Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct UiTextureIndex {
     /// The `epaint::TextureId` of the texture.
     pub id: u64,
