@@ -1,7 +1,7 @@
 [workspace]
 members = [
     ".",
-    "example_mod",
+    "example_mod", "voxel_engine_macros",
     "voxel_engine_types"
 ]
 
@@ -13,11 +13,16 @@ version = "0.1.0"
 # Internal dependencies
 example_mod = { path = "example_mod", version = "0.1.0" }
 voxel_engine = { path = ".", version = "0.1.0" }
+voxel_engine_macros = { path = "voxel_engine_macros", version = "0.1.0" }
 voxel_engine_types = { path = "voxel_engine_types", version = "0.1.0" }
 
 # External dependencies
 egui_demo_lib = { version = "0.28.1", default-features = false }
 egui_wings = { git = "https://github.com/DouglasDwyer/egui_wings", rev = "4b1b6eef8433d5467544d6f4210ae159041da16f", default-features = false }
+quote = { version = "1.0.35", default-features = false }
+serde = { version = "1.0.205", default-features = false }
+toml = { version = "0.8.19", default-features = false }
+wasset = { version = "0.1.1", default-features = false }
 wings = { version = "0.1.3", default-features = false }
 
 [patch.crates-io]
@@ -30,4 +35,10 @@ edition.workspace = true
 version.workspace = true
 
 [dependencies]
+egui_wings = { workspace = true, optional = true }
+voxel_engine_macros.workspace = true
 voxel_engine_types.workspace = true
+
+[features]
+egui = [ "dep:egui_wings", "voxel_engine_types/egui" ]
+toml = [ "voxel_engine_types/toml" ]

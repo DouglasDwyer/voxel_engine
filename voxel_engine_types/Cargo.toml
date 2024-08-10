@@ -4,4 +4,12 @@ edition.workspace = true
 version.workspace = true
 
 [dependencies]
+egui_wings = { workspace = true, optional = true }
+serde.workspace = true
+toml = { workspace = true, optional = true }
+wasset.workspace = true
 wings.workspace = true
+
+[features]
+egui = [ "dep:egui_wings" ]
+toml = [ "dep:toml", "toml/parse" ]

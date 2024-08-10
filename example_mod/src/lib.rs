@@ -1,7 +1,11 @@
 use egui_demo_lib::*;
-use egui_wings::*;
+use serde::*;
 use voxel_engine::*;
+use voxel_engine::asset::*;
+use voxel_engine::egui::*;
 use wings::*;
+
+include_assets!("example_mod/assets");
 
 instantiate_systems!(Client, [HelloClient]);
 instantiate_systems!(Server, [HelloServer]);
@@ -52,8 +56,17 @@ impl WingsSystem for HelloClient {
 pub struct HelloServer;
 
 impl WingsSystem for HelloServer {
-    fn new(_: WingsContextHandle<Self>) -> Self {
-        println!("Hello server!");
+    const DEPENDENCIES: Dependencies = dependencies()
+        .with::<dyn AssetManager>();
+
+    fn new(ctx: WingsContextHandle<Self>) -> Self {
+        println!("Hello server! {:?}", ctx.get::<dyn AssetManager>().get_from_toml::<MyConfig>(assets::MY_CONFIG));
         Self
     }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+struct MyConfig {
+    pub hello: String,
+    pub is_true: bool
 }

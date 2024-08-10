@@ -1,0 +1,13 @@
+[package]
+name = "voxel_engine_macros"
+edition.workspace = true
+version.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+quote.workspace = true
+toml.workspace = true
+voxel_engine_types.workspace = true
+wasset = { workspace = true, features = [ "encode_macro" ] }

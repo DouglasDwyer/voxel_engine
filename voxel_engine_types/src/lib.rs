@@ -1,4 +1,8 @@
+use serde::*;
 use wings::*;
+
+/// Manages access to `wasset`-embedded data.
+pub mod asset;
 
 /// Facilitates access to frame and tick timing data.
 pub mod timing;
@@ -12,6 +16,16 @@ pub struct Client;
 #[derive(Copy, Clone, Debug)]
 #[export_type]
 pub struct Server;
+
+/// Indicates an error that occurred in the engine.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct EngineError(String);
+
+impl<T: Into<Box<dyn std::error::Error>>> From<T> for EngineError {
+    fn from(value: T) -> Self {
+        Self(format!("{:?}", value.into()))
+    }
+}
 
 /// Allows for writing log messages to the game's console output.
 #[system_trait(host)]
