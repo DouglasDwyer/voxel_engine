@@ -32,6 +32,10 @@ impl HelloClient {
             Image::new(self.ctx.get::<dyn AssetManager>().get_ui_texture(assets::TEXTURE))
                 .max_size(egui::vec2(200.0, 200.0))
                 .ui(ui);
+
+            if ui.button("fidget gallery").clicked() {
+                println!("Uh oh!");
+            }
         });
         self.widget_gallery.show(&context, &mut true);
     }

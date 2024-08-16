@@ -72,11 +72,11 @@ pub struct UiTextureIndex {
 }
 
 #[cfg(feature = "egui")]
-impl<'a> From<UiTextureIndex> for egui_wings::ImageSource<'a> {
+impl<'a> From<UiTextureIndex> for egui_wings::egui::ImageSource<'a> {
     fn from(value: UiTextureIndex) -> Self {
-        Self::Texture(egui_wings::load::SizedTexture {
-            id: egui_wings::TextureId::User(value.id),
-            size: egui_wings::Vec2 { x: value.width, y: value.height }
+        Self::Texture(egui_wings::egui::load::SizedTexture {
+            id: egui_wings::egui::TextureId::User(value.id),
+            size: egui_wings::egui::Vec2 { x: value.width, y: value.height }
         })
     }
 }

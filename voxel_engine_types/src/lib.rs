@@ -4,6 +4,9 @@ use wings::*;
 /// Manages access to `wasset`-embedded data.
 pub mod asset;
 
+/// Allows for accessing user input.
+pub mod input;
+
 /// Facilitates access to frame and tick timing data.
 pub mod timing;
 
