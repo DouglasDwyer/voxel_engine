@@ -151,9 +151,9 @@ dependencies = [
 
 [[package]]
 name = "egui_wings"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba909587d6b176e121f6b1c6c5cb1515a03f145f16fe6b562c9c55b49e53a14c"
+checksum = "2f2711ebe824eb1c1ee0cf6ae518595ba95c8a859ca7fd063f752bc21e0ddc0c"
 dependencies = [
  "egui",
  "serde",
@@ -659,9 +659,9 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
 name = "wasset"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "586c2e59e1f45d0723922fb0db5d9511d1c9ca98d727897d7b9113246aed3dd4"
+checksum = "00c2c7e499949ab46c7cf464fc0ae4916755e9ef1f946aa67ab266c82b2530d5"
 dependencies = [
  "fxhash",
  "litrs",
