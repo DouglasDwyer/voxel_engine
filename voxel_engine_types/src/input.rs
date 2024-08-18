@@ -171,10 +171,10 @@ pub enum AnalogInput {
 pub enum MouseAxis {
 	/// The horizontal wheel axis. Returns a real number corresponding to the number
 	/// of wheel "clicks" that occurred on the current frame.
-	HorizontalWheel,
+	WheelX,
 	/// The vertical wheel axis. Returns a real number corresponding to the number
 	/// of wheel "clicks" that occurred on the current frame.
-	VerticalWheel
+	WheelY
 }
 
 /// Identifies a source to which a digital action may be bound.
