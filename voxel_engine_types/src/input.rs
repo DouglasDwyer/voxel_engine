@@ -162,8 +162,33 @@ pub struct DigitalResult {
 /// Identifies a source to which an analog action may be bound.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum AnalogInput {
+	/// An axis on a gamepad.
+	Gamepad(GamepadAxis),
 	/// An axis on a mouse.
 	Mouse(MouseAxis)
+}
+
+/// Identifies a continuous axis on a gamepad, returning a value on the range `[-1.0, 1.0]`.
+/// Follows the [gilrs standard layout](https://docs.rs/gilrs/ev/enum.Button.html).
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[repr(u8)]
+pub enum GamepadAxis {
+	/// The horizontal axis of the left stick.
+    LeftStickX,
+	/// The vertical axis of the left stick.
+    LeftStickY,
+	/// The left Z-stick.
+    LeftZ,
+	/// The horizontal axis of the right stick.
+    RightStickX,
+	/// The vertical axis of the right stick.
+    RightStickY,
+	/// The right Z-stick.
+    RightZ,
+	/// The horizontal axis of the D-pad.
+    DPadX,
+	/// The vertical axis of the D-pad.
+    DPadY
 }
 
 /// Identifies a continuous axis on a mouse.
@@ -180,6 +205,8 @@ pub enum MouseAxis {
 /// Identifies a source to which a digital action may be bound.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum DigitalInput {
+	/// A button on a controller.
+	Gamepad(GamepadButton),
     /// A key on a keyboard.
     Keyboard(Key),
     /// A mouse button.
@@ -188,6 +215,7 @@ pub enum DigitalInput {
 
 /// Denotes a key on a user's keyboard.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[repr(u8)]
 pub enum Key {
 	// Alphabet
 	A,
@@ -316,8 +344,53 @@ pub enum Key {
 	Slash,
 }
 
+/// Identifies a button on a controller, following the [gilrs standard layout](https://docs.rs/gilrs/ev/enum.Button.html).
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[repr(u8)]
+pub enum GamepadButton {
+	/// The bottom button on the action pad.
+    South,
+	/// The right button on the action pad.
+    East,
+	/// The north button on the action pad.
+    North,
+	/// The west button on the action pad.
+    West,
+	/// The C-button.
+    C,
+	/// The Z-button.
+    Z,
+	/// The first left trigger.
+    LeftTrigger,
+	/// The second left trigger.
+    LeftTrigger2,
+	/// The first right trigger.
+    RightTrigger,
+	/// The second right trigger.
+    RightTrigger2,
+	/// The select button.
+    Select,
+	/// The start button.
+    Start,
+	/// The mode button.
+    Mode,
+	/// The left thumb button.
+    LeftThumb,
+	/// The right thumb button.
+    RightThumb,
+	/// The D-pad up button.
+    DPadUp,
+	/// The D-pad down button.
+    DPadDown,
+	/// The D-pad left button.
+    DPadLeft,
+	/// The D-pad right button.
+    DPadRight
+}
+
 /// Indicates a button on the user's mouse.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[repr(u8)]
 pub enum MouseButton {
     /// The left mouse button.
     Left,
