@@ -344,7 +344,7 @@ pub enum Key {
 	Slash,
 }
 
-/// Identifies a button on a controller, following the [gilrs standard layout](https://docs.rs/gilrs/ev/enum.Button.html).
+/// Identifies a button on a controller, following the [gilrs standard layout](https://docs.rs/gilrs/latest/gilrs/).
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum GamepadButton {
