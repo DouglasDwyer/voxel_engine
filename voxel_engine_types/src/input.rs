@@ -194,6 +194,10 @@ pub enum GamepadAxis {
 /// Identifies a continuous axis on a mouse.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum MouseAxis {
+	/// The horizontal change in mouse position, reported in raw devicec units.
+	DeltaX,
+	/// The vertical change in mouse position, reported in raw device units.
+	DeltaY,
 	/// The horizontal wheel axis. Returns a real number corresponding to the number
 	/// of wheel "clicks" that occurred on the current frame.
 	WheelX,
