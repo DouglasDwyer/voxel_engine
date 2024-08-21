@@ -8,6 +8,10 @@ use wings::*;
 /// Allows for reading from the user's input devices.
 #[system_trait(host)]
 pub trait Input: 'static {
+	/// Gets the value of a raw input, without considering whether any actions
+	/// are registered with it.
+	fn get_raw(&self, raw_input: RawInput) -> f32;
+
     /// Gets a handle referencing the given analog action,
     /// which may take on a continuous range of values.
     /// The action is created if it does not exist.
@@ -66,7 +70,7 @@ pub trait InputKind: Sealed + Sized {
 }
 
 impl InputKind for Analog {
-	type Binding = AnalogInput;
+	type Binding = AnalogBinding;
 
 	type Result = f32;
 	
@@ -80,7 +84,7 @@ impl InputKind for Analog {
 }
 
 impl InputKind for Digital {
-	type Binding = DigitalInput;
+	type Binding = DigitalBinding;
 
 	type Result = DigitalResult;
 	
@@ -112,6 +116,8 @@ impl<I: InputKind> From<ActionId<I>> for u64 {
 /// Identifies an action and describes its default parameters.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct ActionDescriptor<I: InputKind> {
+	/// A description of the action, to be displayed to the user.
+	pub description: String,
     /// A list of default buttons. The first button that exists when
     /// this action is created will automatically be bound to it.
     pub default_bindings: Vec<I::Binding>,
@@ -121,9 +127,10 @@ pub struct ActionDescriptor<I: InputKind> {
 
 impl<I: InputKind> ActionDescriptor<I> {
     /// Creates a new descriptor associated with the given system.
-    pub fn new(name: ActionName, default_bindings: &[I::Binding]) -> Self {
+    pub fn new(name: ActionName, description: impl Into<String>, default_bindings: &[I::Binding]) -> Self {
         Self {
             default_bindings: default_bindings.to_vec(),
+			description: description.into(),
             name
         }
     }
@@ -159,13 +166,37 @@ pub struct DigitalResult {
     pub pressed: bool
 }
 
-/// Identifies a source to which an analog action may be bound.
+/// Determines how a raw user input will affect an analog action.
+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Serialize, Deserialize)]
+pub struct AnalogBinding {
+	/// Whether the input should be multiplied by `-1.0` before being returned.
+	pub invert: bool,
+	/// The raw input to read.
+	pub raw_input: RawInput,
+}
+
+/// Determines how a raw user input will affect an analog action.
+#[derive(Copy, Clone, Debug, PartialEq, PartialOrd, Serialize, Deserialize)]
+pub struct DigitalBinding {
+	/// The signed value beyond which this input will be considered active. If negative,
+	/// then the raw input must return a lower value than `threshold` to activate.
+	/// If positive, then the raw input must return a higher value.
+	pub threshold: f32,
+	/// The raw input to read. 
+	pub raw_input: RawInput
+}
+
+/// Identifies a source to which an action may be bound.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
-pub enum AnalogInput {
-	/// An axis on a gamepad.
-	Gamepad(GamepadAxis),
-	/// An axis on a mouse.
-	Mouse(MouseAxis)
+pub enum RawInput {
+	/// The input refers to an axis on a gamepad.
+	GamepadAxis(GamepadAxis),
+	/// The input refers to a button on a gamepad.
+	GamepadButton(GamepadButton),
+	/// The input refers to a button on a keyboard.
+	Key(Key),
+	/// The input refers to a button a mouse.
+	MouseButton(MouseButton),
 }
 
 /// Identifies a continuous axis on a gamepad, returning a value on the range `[-1.0, 1.0]`.
@@ -191,160 +222,239 @@ pub enum GamepadAxis {
     DPadY
 }
 
-/// Identifies a continuous axis on a mouse.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
-pub enum MouseAxis {
-	/// The horizontal change in mouse position, reported in raw devicec units.
-	DeltaX,
-	/// The vertical change in mouse position, reported in raw device units.
-	DeltaY,
-	/// The horizontal wheel axis. Returns a real number corresponding to the number
-	/// of wheel "clicks" that occurred on the current frame.
-	WheelX,
-	/// The vertical wheel axis. Returns a real number corresponding to the number
-	/// of wheel "clicks" that occurred on the current frame.
-	WheelY
-}
-
-/// Identifies a source to which a digital action may be bound.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
-pub enum DigitalInput {
-	/// A button on a controller.
-	Gamepad(GamepadButton),
-    /// A key on a keyboard.
-    Keyboard(Key),
-    /// A mouse button.
-    Mouse(MouseButton),
-}
-
 /// Denotes a key on a user's keyboard.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum Key {
-	// Alphabet
+	/// The `A` key.
 	A,
+	/// The `B` key.
 	B,
+	/// The `C` key.
 	C,
+	/// The `D` key.
 	D,
+	/// The `E` key.
 	E,
+	/// The `F` key.
 	F,
+	/// The `G` key.
 	G,
+	/// The `H` key.
 	H,
+	/// The `I` key.
 	I,
+	/// The `J` key.
 	J,
+	/// The `K` key.
 	K,
+	/// The `L` key.
 	L,
+	/// The `M` key.
 	M,
+	/// The `N` key.
 	N,
+	/// The `O` key.
 	O,
+	/// The `P` key.
 	P,
+	/// The `Q` key.
 	Q,
+	/// The `R` key.
 	R,
+	/// The `S` key.
 	S,
+	/// The `T` key.
 	T,
+	/// The `U` key.
 	U,
+	/// The `V` key.
 	V,
+	/// The `W` key.
 	W,
+	/// The `X` key.
 	X,
+	/// The `Y` key.
 	Y,
+	/// The `Z` key.
 	Z,
-	// Function Keys
+	/// The `esc` key.
 	Escape,
+	/// The `F1` key.
 	F1,
+	/// The `F2` key.
 	F2,
+	/// The `F3` key.
 	F3,
+	/// The `F4` key.
 	F4,
+	/// The `F5` key.
 	F5,
+	/// The `F6` key.
 	F6,
+	/// The `F7` key.
 	F7,
+	/// The `F8` key.
 	F8,
+	/// The `F9` key.
 	F9,
+	/// The `F10` key.
 	F10,
+	/// The `F11` key.
 	F11,
+	/// The `F12` key.
 	F12,
+	/// The `F13` key.
 	F13,
+	/// The `F14` key.
 	F14,
+	/// The `F15` key.
 	F15,
+	/// The `F16` key.
 	F16,
+	/// The `F17` key.
 	F17,
+	/// The `F18` key.
 	F18,
+	/// The `F19` key.
 	F19,
+	/// The `F20` key.
 	F20,
+	/// The `F21` key.
 	F21,
+	/// The `F22` key.
 	F22,
+	/// The `F23` key.
 	F23,
+	/// The `F24` key.
 	F24,
-	// Number Keys (Not Numpad)
+	/// The `1` key.
 	Key1,
+	/// The `2` key.
 	Key2,
+	/// The `3` key.
 	Key3,
+	/// The `4` key.
 	Key4,
+	/// The `5` key.
 	Key5,
+	/// The `6` key.
 	Key6,
+	/// The `7` key.
 	Key7,
+	/// The `8` key.
 	Key8,
+	/// The `9` key.
 	Key9,
+	/// The `0` key.
 	Key0,
-	// Numpad Keys
+	/// The `numlock` key.
 	Numlock,
+	/// The `0` key on the numpad.
 	Numpad0,
+	/// The `1` key on the numpad.
 	Numpad1,
+	/// The `2` key on the numpad.
 	Numpad2,
+	/// The `3` key on the numpad.
 	Numpad3,
+	/// The `4` key on the numpad.
 	Numpad4,
+	/// The `5` key on the numpad.
 	Numpad5,
+	/// The `6` key on the numpad.
 	Numpad6,
+	/// The `7` key on the numpad.
 	Numpad7,
+	/// The `8` key on the numpad.
 	Numpad8,
+	/// The `9` key on the numpad.
 	Numpad9,
+	/// The `+` key on the numpad.
 	NumpadPlus,
+	/// The `-` key on the numpad.
 	NumpadMinus,
+	/// The `*` key on the numpad.
 	NumpadAsterisk,
+	/// The `/` key on the numpad.
 	NumpadSlash,
+	/// The `.` key on the numpad.
 	NumpadDecimal,
+	/// The `enter` key on the numpad.
 	NumpadEnter,
-	// Control Keys
+	/// The `snapshot` key.
 	Snapshot,
+	/// The `scroll lock` key.
 	ScrollLock,
+	/// The `pause` key.
 	Pause,
-	// Home Keys
+	/// The `insert` key.
 	Insert,
+	/// The `home` key.
 	Home,
+	/// The `delete` key.
 	Delete,
+	/// The `end` key.
 	End,
+	/// The `page up` key.
 	PageUp,
+	/// The `page down` key.
 	PageDown,
-	// Arrow Keys
+	/// The `left` arrow key.
 	Left,
+	/// The `right` arrow key.
 	Right,
+	/// The `up` arrow key.
 	Up,
+	/// The `down` arrow key.
 	Down,
-	// Keyboard Controls
+	/// The `grave` key.
 	Grave,
+	/// The `back` key.
 	Back,
+	/// The `tab` key.
 	Tab,
+	/// The `caps` key.
 	CapitalLock,
+	/// The `return` key.
 	Return,
+	/// The `space` key.
 	Space,
-	// Modifiers
+	/// The left `alt` key.
 	LAlt,
+	/// The right `alt` key.
 	RAlt,
+	/// The left `shift` key.
 	LShift,
+	/// The right `shift` key.
 	RShift,
+	/// The left `ctrl` key.
 	LControl,
+	/// The right `ctrl` key.
 	RControl,
+	/// The left `windows` or `command` key.
 	LWin,
+	/// The right `windows` or `command` key.
 	RWin,
-	// Alpha-adjacent
+	/// The `-` key.
 	Minus,
+	/// The `=` key.
 	Equals,
+	/// The `[` key.
 	LBracket,
+	/// The `]` key.
 	RBracket,
+	/// The `\` key.
 	Backslash,
+	/// The `;` key.
 	Semicolon,
+	/// The `'` key.
 	Apostrophe,
+	/// The `,` key.
 	Comma,
+	/// The `.` key.
 	Period,
+	/// The `/` key.
 	Slash,
 }
 

@@ -151,9 +151,9 @@ dependencies = [
 
 [[package]]
 name = "egui_wings"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "090b4a73cdc47a477fbdb8a12efff68548fcdeff9a5d23d207d6c400c4b51dd8"
+checksum = "7f8889fcbea785eb6ace0fc49b56ed7c96a137983e6bd78d80ddc3964c65da2a"
 dependencies = [
  "egui",
  "serde",
