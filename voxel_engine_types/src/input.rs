@@ -222,6 +222,20 @@ pub enum GamepadAxis {
     DPadY
 }
 
+impl GamepadAxis {
+	/// A list of all possible gamepad axis values.
+	pub const ALL: [Self; 8] = [
+		Self::LeftStickX,
+		Self::LeftStickY,
+		Self::LeftZ,
+		Self::RightStickX,
+		Self::RightStickY,
+		Self::RightZ,
+		Self::DPadX,
+		Self::DPadY
+	];
+}
+
 /// Denotes a key on a user's keyboard.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
@@ -458,6 +472,127 @@ pub enum Key {
 	Slash,
 }
 
+impl Key {
+	/// A list of all possible key values.
+	pub const ALL: [Self; 115] = [
+		Self::A,
+		Self::B,
+		Self::C,
+		Self::D,
+		Self::E,
+		Self::F,
+		Self::G,
+		Self::H,
+		Self::I,
+		Self::J,
+		Self::K,
+		Self::L,
+		Self::M,
+		Self::N,
+		Self::O,
+		Self::P,
+		Self::Q,
+		Self::R,
+		Self::S,
+		Self::T,
+		Self::U,
+		Self::V,
+		Self::W,
+		Self::X,
+		Self::Y,
+		Self::Z,
+		Self::Escape,
+		Self::F1,
+		Self::F2,
+		Self::F3,
+		Self::F4,
+		Self::F5,
+		Self::F6,
+		Self::F7,
+		Self::F8,
+		Self::F9,
+		Self::F10,
+		Self::F11,
+		Self::F12,
+		Self::F13,
+		Self::F14,
+		Self::F15,
+		Self::F16,
+		Self::F17,
+		Self::F18,
+		Self::F19,
+		Self::F20,
+		Self::F21,
+		Self::F22,
+		Self::F23,
+		Self::F24,
+		Self::Key1,
+		Self::Key2,
+		Self::Key3,
+		Self::Key4,
+		Self::Key5,
+		Self::Key6,
+		Self::Key7,
+		Self::Key8,
+		Self::Key9,
+		Self::Key0,
+		Self::Numlock,
+		Self::Numpad0,
+		Self::Numpad1,
+		Self::Numpad2,
+		Self::Numpad3,
+		Self::Numpad4,
+		Self::Numpad5,
+		Self::Numpad6,
+		Self::Numpad7,
+		Self::Numpad8,
+		Self::Numpad9,
+		Self::NumpadPlus,
+		Self::NumpadMinus,
+		Self::NumpadAsterisk,
+		Self::NumpadSlash,
+		Self::NumpadDecimal,
+		Self::NumpadEnter,
+		Self::Snapshot,
+		Self::ScrollLock,
+		Self::Pause,
+		Self::Insert,
+		Self::Home,
+		Self::Delete,
+		Self::End,
+		Self::PageUp,
+		Self::PageDown,
+		Self::Left,
+		Self::Right,
+		Self::Up,
+		Self::Down,
+		Self::Grave,
+		Self::Back,
+		Self::Tab,
+		Self::CapitalLock,
+		Self::Return,
+		Self::Space,
+		Self::LAlt,
+		Self::RAlt,
+		Self::LShift,
+		Self::RShift,
+		Self::LControl,
+		Self::RControl,
+		Self::LWin,
+		Self::RWin,
+		Self::Minus,
+		Self::Equals,
+		Self::LBracket,
+		Self::RBracket,
+		Self::Backslash,
+		Self::Semicolon,
+		Self::Apostrophe,
+		Self::Comma,
+		Self::Period,
+		Self::Slash,
+	];
+}
+
 /// Identifies a button on a controller, following the [gilrs standard layout](https://docs.rs/gilrs/latest/gilrs/).
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
@@ -502,6 +637,31 @@ pub enum GamepadButton {
     DPadRight
 }
 
+impl GamepadButton {
+	/// A list of all possible gamepad button values.
+	pub const ALL: [Self; 19] = [
+    	Self::South,
+    	Self::East,
+    	Self::North,
+    	Self::West,
+    	Self::C,
+    	Self::Z,
+    	Self::LeftTrigger,
+    	Self::LeftTrigger2,
+    	Self::RightTrigger,
+    	Self::RightTrigger2,
+    	Self::Select,
+    	Self::Start,
+    	Self::Mode,
+    	Self::LeftThumb,
+    	Self::RightThumb,
+    	Self::DPadUp,
+    	Self::DPadDown,
+    	Self::DPadLeft,
+    	Self::DPadRight
+	];
+}
+
 /// Indicates a button on the user's mouse.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
@@ -512,6 +672,15 @@ pub enum MouseButton {
     Middle,
     /// The right mouse button.
     Right
+}
+
+impl MouseButton {
+	/// A list of all possible mouse button values.
+	pub const ALL: [Self; 3] = [
+		Self::Left,
+		Self::Middle,
+		Self::Right
+	];
 }
 
 /// Hides internal implementation details.
