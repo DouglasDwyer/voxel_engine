@@ -4,6 +4,7 @@ members = [
     "example_mod", "voxel_engine_macros",
     "voxel_engine_types"
 ]
+resolver = "2"
 
 [workspace.package]
 edition = "2021"
@@ -17,9 +18,10 @@ voxel_engine_macros = { path = "voxel_engine_macros", version = "0.1.0" }
 voxel_engine_types = { path = "voxel_engine_types", version = "0.1.0" }
 
 # External dependencies
+bytemuck = { version = "1.16.3", default-features = false, features = [ "derive" ] }
 egui_demo_lib = { version = "0.28.1", default-features = false }
 egui_wings = { version = "0.1.4", default-features = false }
-glam = { version = "0.29.0", default-features = false, features = [ "serde", "std" ] }
+glam = { version = "0.29.0", default-features = false, features = [ "bytemuck", "serde", "std" ] }
 quote = { version = "1.0.35", default-features = false }
 serde = { version = "1.0.205", default-features = false }
 toml = { version = "0.8.19", default-features = false }

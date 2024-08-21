@@ -4,6 +4,7 @@ edition.workspace = true
 version.workspace = true
 
 [dependencies]
+bytemuck.workspace = true
 egui_wings = { workspace = true, optional = true }
 glam.workspace = true
 serde.workspace = true

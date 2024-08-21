@@ -10,6 +10,9 @@ pub mod input;
 /// Provides abstractions/functions for working with vectors and other math.
 pub mod math;
 
+/// Allows for manipulating the camera and player.
+pub mod player;
+
 /// Facilitates access to frame and tick timing data.
 pub mod timing;
 
