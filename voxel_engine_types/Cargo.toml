@@ -5,6 +5,7 @@ version.workspace = true
 
 [dependencies]
 egui_wings = { workspace = true, optional = true }
+glam.workspace = true
 serde.workspace = true
 toml = { workspace = true, optional = true }
 wasset.workspace = true

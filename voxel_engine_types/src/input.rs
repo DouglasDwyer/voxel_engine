@@ -1,3 +1,4 @@
+use crate::math::*;
 use private::*;
 use serde::*;
 use serde::de::*;
@@ -8,6 +9,14 @@ use wings::*;
 /// Allows for reading from the user's input devices.
 #[system_trait(host)]
 pub trait Input: 'static {
+	/// Gets the mouse cursor's movement for this frame. This value
+	/// is given in device units, adjusted by mouse sensitivity.
+	fn get_pointer_delta(&self) -> Vec2;
+
+	/// Gets the number of ticks that the mouse wheel has scrolled
+	/// this frame. This value is given in device units.
+	fn get_scroll_delta(&self) -> IVec2;
+
 	/// Gets the value of a raw input, without considering whether any actions
 	/// are registered with it.
 	fn get_raw(&self, raw_input: RawInput) -> f32;

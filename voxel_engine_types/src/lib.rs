@@ -7,6 +7,9 @@ pub mod asset;
 /// Allows for accessing user input.
 pub mod input;
 
+/// Provides abstractions/functions for working with vectors and other math.
+pub mod math;
+
 /// Facilitates access to frame and tick timing data.
 pub mod timing;
 

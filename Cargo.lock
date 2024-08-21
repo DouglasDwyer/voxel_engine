@@ -253,6 +253,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "glam"
+version = "0.29.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c28091a37a5d09b555cb6628fd954da299b536433834f5b8e59eba78e0cbbf8a"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.14.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -645,6 +654,7 @@ name = "voxel_engine_types"
 version = "0.1.0"
 dependencies = [
  "egui_wings",
+ "glam",
  "serde",
  "toml",
  "wasset",
