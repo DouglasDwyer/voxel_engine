@@ -6,7 +6,7 @@ use std::hash::*;
 use std::marker::*;
 use wings::*;
 
-/// Allows for reading from the user's input devices.
+/// Allows for reading from the user's input devices. Only available on the [`Client`](crate::Client).
 #[system_trait(host)]
 pub trait Input: 'static {
 	/// Whether the game window is focused in the user's operating system.
