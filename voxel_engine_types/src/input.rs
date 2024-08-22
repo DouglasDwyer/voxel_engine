@@ -10,26 +10,32 @@ use wings::*;
 #[system_trait(host)]
 pub trait Input: 'static {
 	/// Whether the game window is focused in the user's operating system.
-	fn is_focused(&self) -> bool;
-
-	/// Gets the mouse cursor's movement for this frame. This value
-	/// is given in device units, adjusted by mouse sensitivity.
-	fn get_pointer_delta(&self) -> Vec2;
-
-	/// Returns whether the pointer is currently locked to the center of the screen.
-	fn get_pointer_locked(&self) -> bool;
+	fn focused(&self) -> bool;
 
 	/// Gets the value of a raw input, without considering whether any actions
 	/// are registered with it.
 	fn get_raw(&self, raw_input: RawInput) -> f32;
 
-	/// Gets the number of ticks that the mouse wheel has scrolled
-	/// this frame. This value is given in device units.
-	fn get_scroll_delta(&self) -> IVec2;
+	/// Gets the mouse cursor's movement for this frame. This value
+	/// is given in device units, adjusted by mouse sensitivity.
+	fn pointer_delta(&self) -> Vec2;
+
+	/// Gets the normalized direction that the user's mouse is pointing
+	/// in 3D space. When the pointer is locked, this is always relative
+	/// to the screen center. When the pointer is over a UI element (or
+	/// something other than the game) this returns `None`.
+	fn pointer_direction(&self) -> Option<Vec3A>;
+
+	/// Returns whether the pointer is currently locked to the center of the screen.
+	fn pointer_locked(&self) -> bool;
 	
 	/// Sets whether the mouse cursor will be invisible and locked to the center of the screen.
 	/// The user's mouse movements can then be read with [`Self::get_pointer_delta`].
 	fn set_pointer_locked(&mut self, locked: bool);
+
+	/// Gets the number of ticks that the mouse wheel has scrolled
+	/// this frame. This value is given in device units.
+	fn scroll_delta(&self) -> IVec2;
 
     /// Gets a handle referencing the given analog action,
     /// which may take on a continuous range of values.
