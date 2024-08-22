@@ -1,7 +1,4 @@
-use alloc::string::*;
 use voxel_engine_types::*;
-
-extern crate alloc;
 
 // Creates the function item `add_wasi_snapshot_preview1_to_wasmi_linker` which when called adds all
 // `wasi preview_1` functions to the linker

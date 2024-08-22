@@ -9,17 +9,27 @@ use wings::*;
 /// Allows for reading from the user's input devices.
 #[system_trait(host)]
 pub trait Input: 'static {
+	/// Whether the game window is focused in the user's operating system.
+	fn is_focused(&self) -> bool;
+
 	/// Gets the mouse cursor's movement for this frame. This value
 	/// is given in device units, adjusted by mouse sensitivity.
 	fn get_pointer_delta(&self) -> Vec2;
 
-	/// Gets the number of ticks that the mouse wheel has scrolled
-	/// this frame. This value is given in device units.
-	fn get_scroll_delta(&self) -> IVec2;
+	/// Returns whether the pointer is currently locked to the center of the screen.
+	fn get_pointer_locked(&self) -> bool;
 
 	/// Gets the value of a raw input, without considering whether any actions
 	/// are registered with it.
 	fn get_raw(&self, raw_input: RawInput) -> f32;
+
+	/// Gets the number of ticks that the mouse wheel has scrolled
+	/// this frame. This value is given in device units.
+	fn get_scroll_delta(&self) -> IVec2;
+	
+	/// Sets whether the mouse cursor will be invisible and locked to the center of the screen.
+	/// The user's mouse movements can then be read with [`Self::get_pointer_delta`].
+	fn set_pointer_locked(&mut self, locked: bool);
 
     /// Gets a handle referencing the given analog action,
     /// which may take on a continuous range of values.
