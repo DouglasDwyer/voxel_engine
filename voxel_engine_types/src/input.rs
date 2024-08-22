@@ -219,7 +219,7 @@ pub enum RawInput {
 }
 
 /// Identifies a continuous axis on a gamepad, returning a value on the range `[-1.0, 1.0]`.
-/// Follows the [gilrs standard layout](https://docs.rs/gilrs/ev/enum.Button.html).
+/// Follows the [gilrs standard layout](https://docs.rs/gilrs/latest/gilrs/).
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum GamepadAxis {
