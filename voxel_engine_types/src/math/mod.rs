@@ -1,7 +1,11 @@
 use bytemuck::*;
 pub use glam::*;
+pub use crate::math::direction::*;
 use serde::*;
 use std::ops::*;
+
+/// Types for distinguishing between various cardinal directions;
+mod direction;
 
 /// Describes a location and orientation in 3D space.
 #[derive(Copy, Clone, Serialize, Deserialize, Default, Debug, PartialEq)]

@@ -10,6 +10,9 @@ pub mod input;
 /// Provides abstractions/functions for working with vectors and other math.
 pub mod math;
 
+/// Provides access to raycasting and physics functionality.
+pub mod physics;
+
 /// Allows for manipulating the camera and player.
 pub mod player;
 
