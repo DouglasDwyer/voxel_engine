@@ -436,6 +436,62 @@ impl From<Axis> for Vec3A {
     }
 }
 
+impl Index<Axis> for IVec3 {
+    type Output = i32;
+
+    fn index(&self, index: Axis) -> &Self::Output {
+        &self[index.as_u8() as usize]
+    }
+}
+
+impl IndexMut<Axis> for IVec3 {
+    fn index_mut(&mut self, index: Axis) -> &mut Self::Output {
+        &mut self[index.as_u8() as usize]
+    }
+}
+
+impl Index<Axis> for UVec3 {
+    type Output = u32;
+
+    fn index(&self, index: Axis) -> &Self::Output {
+        &self[index.as_u8() as usize]
+    }
+}
+
+impl IndexMut<Axis> for UVec3 {
+    fn index_mut(&mut self, index: Axis) -> &mut Self::Output {
+        &mut self[index.as_u8() as usize]
+    }
+}
+
+impl Index<Axis> for Vec3 {
+    type Output = f32;
+
+    fn index(&self, index: Axis) -> &Self::Output {
+        &self[index.as_u8() as usize]
+    }
+}
+
+impl IndexMut<Axis> for Vec3 {
+    fn index_mut(&mut self, index: Axis) -> &mut Self::Output {
+        &mut self[index.as_u8() as usize]
+    }
+}
+
+impl Index<Axis> for Vec3A {
+    type Output = f32;
+
+    fn index(&self, index: Axis) -> &Self::Output {
+        &self[index.as_u8() as usize]
+    }
+}
+
+impl IndexMut<Axis> for Vec3A {
+    fn index_mut(&mut self, index: Axis) -> &mut Self::Output {
+        &mut self[index.as_u8() as usize]
+    }
+}
+
 /// Provides a way to map between Cartesian cardinal directions and
 /// another type.
 #[derive(Copy, Clone, Debug, Default)]
