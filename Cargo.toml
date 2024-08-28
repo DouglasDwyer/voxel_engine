@@ -17,7 +17,7 @@ repository = "https://github.com/DouglasDwyer/voxel_engine"
 
 [workspace.dependencies]
 # Internal dependencies
-example_mod = { path = "example_mod", version = "0.1.0" }
+example_mod = { path = "example_mod" }
 voxel_engine = { path = ".", version = "0.1.0" }
 voxel_engine_macros = { path = "voxel_engine_macros", version = "0.1.0" }
 voxel_engine_types = { path = "voxel_engine_types", version = "0.1.0" }
