@@ -9,7 +9,7 @@ resolver = "2"
 [workspace.package]
 edition = "2021"
 version = "0.1.0"
-description = "Public API for the octo voxel game engine"
+description = "Public API for the Octo voxel game engine"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/DouglasDwyer/voxel_engine"
