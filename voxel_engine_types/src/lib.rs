@@ -69,5 +69,5 @@ pub enum LogLevel {
     Warn,
 
     /// Describes messages indicating serious errors.
-    Error
+    Error,
 }

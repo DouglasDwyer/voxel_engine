@@ -1,6 +1,6 @@
+pub use crate::math::direction::*;
 use bytemuck::*;
 pub use glam::*;
-pub use crate::math::direction::*;
 use serde::*;
 use std::ops::*;
 
@@ -13,7 +13,7 @@ pub struct Transform {
     /// The position of the object in the world.
     pub position: WorldVec,
     /// A quaternion which converts from the object's rotation space to world rotation space.
-    pub rotation: Quat
+    pub rotation: Quat,
 }
 
 impl Transform {
@@ -26,14 +26,20 @@ impl Transform {
     /// `a` is returned, and when `t = 1`, `b` is returned. `t` may be any finite
     /// floating point number.
     pub fn interpolate(a: &Transform, b: &Transform, t: f32) -> Self {
-        Self::new(a.position.lerp(b.position, t), a.rotation.slerp(b.rotation, t))
+        Self::new(
+            a.position.lerp(b.position, t),
+            a.rotation.slerp(b.rotation, t),
+        )
     }
 
     /// Creates a matrix which converts from points in the model coordinate
     /// system to points in this transform's coordinate space.
     pub fn view_model_matrix(&self, model: &Self) -> Mat4 {
         Mat4::from_rotation_translation(self.rotation.inverse(), Vec3::ZERO)
-            * Mat4::from_rotation_translation(model.rotation, model.position.displacement(self.position).into())
+            * Mat4::from_rotation_translation(
+                model.rotation,
+                model.position.displacement(self.position).into(),
+            )
     }
 
     /// Returns the front-facing direction of this transform in the parent
@@ -57,7 +63,11 @@ pub struct WorldVec {
 
 impl WorldVec {
     /// The world vector that corresponds to the origin.
-    pub const ZERO: Self = Self { x: WorldCoord::ZERO, y: WorldCoord::ZERO, z: WorldCoord::ZERO };
+    pub const ZERO: Self = Self {
+        x: WorldCoord::ZERO,
+        y: WorldCoord::ZERO,
+        z: WorldCoord::ZERO,
+    };
 
     /// Retrieves a representation of this value as an integer vector, in world units.
     pub fn bits(self) -> IVec3 {
@@ -68,7 +78,7 @@ impl WorldVec {
     /// in floating-point voxel units.
     pub fn displacement(self, other: Self) -> Vec3A {
         let disp = cast::<_, IVec3>(self) - cast::<_, IVec3>(other);
-        
+
         let vox = (disp >> WorldCoord::LOG2_UNITS_PER_VOXEL).as_vec3a();
         let frac = (disp & (WorldCoord::UNITS_PER_VOXEL as i32 - 1)).as_vec3a() / 256.0;
 
@@ -153,7 +163,7 @@ impl WorldCoord {
 
     /// The granularity of a world coordinate, or the number of units per voxel.
     pub const UNITS_PER_VOXEL: u32 = 1 << Self::LOG2_UNITS_PER_VOXEL;
-    
+
     /// The base-2 logarithm of the number of units per voxel.
     pub const LOG2_UNITS_PER_VOXEL: u32 = 8;
 
@@ -166,9 +176,10 @@ impl WorldCoord {
     /// in floating-point voxel units.
     pub fn displacement(self, other: Self) -> f32 {
         let disp = self.0 - other.0;
-        
+
         let vox = (disp >> Self::LOG2_UNITS_PER_VOXEL) as f32;
-        let frac = (disp & (Self::UNITS_PER_VOXEL as i32 - 1)) as f32 / Self::UNITS_PER_VOXEL as f32;
+        let frac =
+            (disp & (Self::UNITS_PER_VOXEL as i32 - 1)) as f32 / Self::UNITS_PER_VOXEL as f32;
 
         vox + frac
     }

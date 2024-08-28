@@ -36,9 +36,9 @@ pub struct Ciovec {
 ///
 /// The sizes of the buffers should match that returned by `environ_sizes_get`.
 /// Key/value pairs are expected to be joined with =s, and terminated with \0s.
-/// 
+///
 /// # Safety
-/// 
+///
 /// The input pointers must be valid.
 #[export_name = "__imported_wasi_snapshot_preview1_environ_get"]
 pub unsafe extern "C" fn environ_get(_: *mut *mut u8, _: *mut u8) -> i32 {
@@ -51,9 +51,9 @@ pub unsafe extern "C" fn environ_get(_: *mut *mut u8, _: *mut u8) -> i32 {
 ///
 /// Returns the number of environment variable arguments and the size of the environment variable data.
 /// Note that `offset0` and `offset1` are offsets into memory where the two results are stored.
-/// 
+///
 /// # Safety
-/// 
+///
 /// The input pointers must be valid.
 #[export_name = "__imported_wasi_snapshot_preview1_environ_sizes_get"]
 pub unsafe extern "C" fn environ_sizes_get(offset0: *mut usize, offset1: *mut usize) -> i32 {
@@ -74,16 +74,20 @@ pub unsafe extern "C" fn environ_sizes_get(offset0: *mut usize, offset1: *mut us
 /// - `ciov_buf`, `ciov_buf_len`: used to create ciovec, which is the list of
 ///                               scatter/gather vectors from which to retrieve data.
 /// - `offset0`: The offset into the memory where result (size written) is stored
-/// 
+///
 /// # Safety
-/// 
+///
 /// The inputs must point to valid buffers and the buffer lengths must be valid.
 #[export_name = "_ZN4wasi13lib_generated22wasi_snapshot_preview18fd_write17h594e175a549b8f2dE"]
-pub unsafe extern "C" fn fd_write(fd: i32, mut ciov_buf: *const Ciovec, mut ciov_buf_len: usize, nwritten: *mut usize) -> i32 {
+pub unsafe extern "C" fn fd_write(
+    fd: i32,
+    mut ciov_buf: *const Ciovec,
+    mut ciov_buf_len: usize,
+    nwritten: *mut usize,
+) -> i32 {
     static mut BUFFER: String = String::new();
 
     if fd == 1 || fd == 2 {
-
         while ciov_buf_len != 0 && (*ciov_buf).buf_len == 0 {
             ciov_buf = ciov_buf.add(1);
             ciov_buf_len -= 1;
@@ -91,17 +95,23 @@ pub unsafe extern "C" fn fd_write(fd: i32, mut ciov_buf: *const Ciovec, mut ciov
 
         *nwritten = 0;
         let current_string = &mut *core::ptr::addr_of_mut!(BUFFER);
-        let log_level = if fd == 1 { LogLevel::Info } else { LogLevel::Error };
+        let log_level = if fd == 1 {
+            LogLevel::Info
+        } else {
+            LogLevel::Error
+        };
 
         while ciov_buf_len > 0 {
-            let mut to_write = core::str::from_utf8_unchecked(core::slice::from_raw_parts((*ciov_buf).buf, (*ciov_buf).buf_len));
+            let mut to_write = core::str::from_utf8_unchecked(core::slice::from_raw_parts(
+                (*ciov_buf).buf,
+                (*ciov_buf).buf_len,
+            ));
             while let Some(last) = to_write.find('\n') {
                 let sequence = &to_write[..last];
                 to_write = &to_write[(last + 1)..];
                 if current_string.is_empty() {
                     global_log(log_level, sequence);
-                }
-                else {
+                } else {
                     *current_string += sequence;
                     global_log(log_level, current_string);
                     current_string.clear();
@@ -114,8 +124,7 @@ pub unsafe extern "C" fn fd_write(fd: i32, mut ciov_buf: *const Ciovec, mut ciov
         }
 
         0
-    } 
-    else {
+    } else {
         unreachable!()
     }
 }
@@ -190,7 +199,6 @@ impl_trap_for_funcs!(
     /// Returns the number of environment variable arguments and the size of the environment variable data.
     /// Note that `offset0` and `offset1` are offsets into memory where the two results are stored.
     fn environ_sizes_get(offset0: i32, offset1: i32) -> i32; */
-
 
     /// Return the resolution of a clock.
     ///

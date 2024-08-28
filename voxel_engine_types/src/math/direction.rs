@@ -21,14 +21,14 @@ pub enum Octant {
     /// The left-up-front octant.
     Z1Y1X0 = 0x06,
     /// The right-up-front octant.
-    Z1Y1X1 = 0x07
+    Z1Y1X1 = 0x07,
 }
 
 impl Octant {
     /// Converts the raw bits into a voxel octant.
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// For this conversion to be defined, the raw bits must be on the range `[0, 7]`.
     #[inline(always)]
     pub const unsafe fn from_raw(bits: u8) -> Self {
@@ -38,27 +38,36 @@ impl Octant {
     /// Converts the lowest three raw bits into a voxel octant, ignoring any upper bits.
     #[inline(always)]
     pub const fn from_raw_truncate(bits: u8) -> Self {
-        unsafe {
-            Self::from_raw(bits & 0b111)
-        }
+        unsafe { Self::from_raw(bits & 0b111) }
     }
 
     /// Gets the offset of the unit octant corresponding to this value.
     pub const fn as_uvec3(self) -> UVec3 {
-        uvec3(self as u32 & 0b1, ((self as u8) >> 1) as u32 & 0b1, ((self as u8) >> 2) as u32)
+        uvec3(
+            self as u32 & 0b1,
+            ((self as u8) >> 1) as u32 & 0b1,
+            ((self as u8) >> 2) as u32,
+        )
     }
 
     /// Inverts the position of this octant along the specified axis.
     pub fn flip(self, axis: Axis) -> Octant {
-        unsafe {
-            Self::from_raw((self as u8) ^ (1 << (axis as u8)))
-        }
+        unsafe { Self::from_raw((self as u8) ^ (1 << (axis as u8))) }
     }
 
     /// An array which lists all eight octants in lexical order.
     #[inline(always)]
     pub fn lexical_order() -> &'static [Octant; 8] {
-        &[Octant::Z0Y0X0, Octant::Z0Y0X1, Octant::Z0Y1X0, Octant::Z0Y1X1, Octant::Z1Y0X0, Octant::Z1Y0X1, Octant::Z1Y1X0, Octant::Z1Y1X1]
+        &[
+            Octant::Z0Y0X0,
+            Octant::Z0Y0X1,
+            Octant::Z0Y1X0,
+            Octant::Z0Y1X1,
+            Octant::Z1Y0X0,
+            Octant::Z1Y0X1,
+            Octant::Z1Y1X0,
+            Octant::Z1Y1X1,
+        ]
     }
 }
 
@@ -76,7 +85,6 @@ impl From<Octant> for UVec3 {
         (UVec3::splat(x as u32) >> uvec3(0, 1, 2)) & UVec3::ONE
     }
 }
-
 
 /// Represents a selection of multiple octants within an octree.
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq, Pod, Zeroable)]
@@ -171,13 +179,18 @@ impl From<Octant> for OctantFlags {
 impl IntoIterator for OctantFlags {
     type Item = Octant;
 
-    type IntoIter = std::iter::FilterMap<std::iter::Zip<Range<u8>, std::iter::Repeat<OctantFlags>>, fn((u8, OctantFlags)) -> Option<Octant>>;
+    type IntoIter = std::iter::FilterMap<
+        std::iter::Zip<Range<u8>, std::iter::Repeat<OctantFlags>>,
+        fn((u8, OctantFlags)) -> Option<Octant>,
+    >;
 
     fn into_iter(self) -> Self::IntoIter {
-        (0u8..8).zip(std::iter::repeat(self)).filter_map(move |(x, y)| unsafe {
-            let octant = Octant::from_raw(x);
-            y.contains(octant.into()).then_some(octant)
-        })
+        (0u8..8)
+            .zip(std::iter::repeat(self))
+            .filter_map(move |(x, y)| unsafe {
+                let octant = Octant::from_raw(x);
+                y.contains(octant.into()).then_some(octant)
+            })
     }
 }
 
@@ -201,20 +214,43 @@ impl DirectionFlags {
     /// The +z direction.
     pub const FRONT: Self = Self(1 << Direction::FRONT as u8);
     /// All possible directions.
-    pub const ALL: Self = Self(DirectionFlags::LEFT.0 | DirectionFlags::RIGHT.0 | DirectionFlags::DOWN.0 | DirectionFlags::UP.0 | DirectionFlags::BACK.0 | DirectionFlags::FRONT.0);
+    pub const ALL: Self = Self(
+        DirectionFlags::LEFT.0
+            | DirectionFlags::RIGHT.0
+            | DirectionFlags::DOWN.0
+            | DirectionFlags::UP.0
+            | DirectionFlags::BACK.0
+            | DirectionFlags::FRONT.0,
+    );
 
     /// Creates a new set of direction flags that points toward an octant.
     pub const fn from_octant(a: Octant) -> Self {
         unsafe {
             transmute(match a {
-                Octant::Z0Y0X0 => DirectionFlags::LEFT.0 | DirectionFlags::DOWN.0 | DirectionFlags::BACK.0,
-                Octant::Z0Y0X1 => DirectionFlags::RIGHT.0 | DirectionFlags::DOWN.0 | DirectionFlags::BACK.0,
-                Octant::Z0Y1X0 => DirectionFlags::LEFT.0 | DirectionFlags::UP.0 | DirectionFlags::BACK.0,
-                Octant::Z0Y1X1 => DirectionFlags::RIGHT.0 | DirectionFlags::UP.0 | DirectionFlags::BACK.0,
-                Octant::Z1Y0X0 => DirectionFlags::LEFT.0 | DirectionFlags::DOWN.0 | DirectionFlags::FRONT.0,
-                Octant::Z1Y0X1 => DirectionFlags::RIGHT.0 | DirectionFlags::DOWN.0 | DirectionFlags::FRONT.0,
-                Octant::Z1Y1X0 => DirectionFlags::LEFT.0 | DirectionFlags::UP.0 | DirectionFlags::FRONT.0,
-                Octant::Z1Y1X1 => DirectionFlags::RIGHT.0 | DirectionFlags::UP.0 | DirectionFlags::FRONT.0,
+                Octant::Z0Y0X0 => {
+                    DirectionFlags::LEFT.0 | DirectionFlags::DOWN.0 | DirectionFlags::BACK.0
+                }
+                Octant::Z0Y0X1 => {
+                    DirectionFlags::RIGHT.0 | DirectionFlags::DOWN.0 | DirectionFlags::BACK.0
+                }
+                Octant::Z0Y1X0 => {
+                    DirectionFlags::LEFT.0 | DirectionFlags::UP.0 | DirectionFlags::BACK.0
+                }
+                Octant::Z0Y1X1 => {
+                    DirectionFlags::RIGHT.0 | DirectionFlags::UP.0 | DirectionFlags::BACK.0
+                }
+                Octant::Z1Y0X0 => {
+                    DirectionFlags::LEFT.0 | DirectionFlags::DOWN.0 | DirectionFlags::FRONT.0
+                }
+                Octant::Z1Y0X1 => {
+                    DirectionFlags::RIGHT.0 | DirectionFlags::DOWN.0 | DirectionFlags::FRONT.0
+                }
+                Octant::Z1Y1X0 => {
+                    DirectionFlags::LEFT.0 | DirectionFlags::UP.0 | DirectionFlags::FRONT.0
+                }
+                Octant::Z1Y1X1 => {
+                    DirectionFlags::RIGHT.0 | DirectionFlags::UP.0 | DirectionFlags::FRONT.0
+                }
             })
         }
     }
@@ -240,11 +276,13 @@ impl DirectionFlags {
     /// bits in the second mask represent whether the up, right, and front flags should be set.
     pub fn from_negative_positive_masks(negatives: u8, positives: u8) -> DirectionFlags {
         let x = negatives | (positives << 3);
-        DirectionFlags::from_bits_truncate((x & 0x21)
-            | ((x & 0x02) << 1)
-            | ((x & 0x04) << 2)
-            | ((x & 0x08) >> 2)
-            | ((x & 0x10) >> 1))
+        DirectionFlags::from_bits_truncate(
+            (x & 0x21)
+                | ((x & 0x02) << 1)
+                | ((x & 0x04) << 2)
+                | ((x & 0x08) >> 2)
+                | ((x & 0x10) >> 1),
+        )
     }
 }
 
@@ -287,16 +325,30 @@ impl Not for DirectionFlags {
 impl IntoIterator for DirectionFlags {
     type Item = Direction;
 
-    type IntoIter = std::iter::FilterMap<std::iter::Zip<std::array::IntoIter<Direction, 6>, std::iter::Repeat<DirectionFlags>>, fn((Direction, DirectionFlags)) -> Option<Direction>>;
+    type IntoIter = std::iter::FilterMap<
+        std::iter::Zip<std::array::IntoIter<Direction, 6>, std::iter::Repeat<DirectionFlags>>,
+        fn((Direction, DirectionFlags)) -> Option<Direction>,
+    >;
 
     fn into_iter(self) -> Self::IntoIter {
-        [Direction::LEFT, Direction::RIGHT, Direction::DOWN, Direction::UP, Direction::BACK, Direction::FRONT].into_iter().zip(std::iter::repeat(self)).filter_map(move |(x, y)| y.contains(DirectionFlags(1 << (x as u8))).then_some(x))
+        [
+            Direction::LEFT,
+            Direction::RIGHT,
+            Direction::DOWN,
+            Direction::UP,
+            Direction::BACK,
+            Direction::FRONT,
+        ]
+        .into_iter()
+        .zip(std::iter::repeat(self))
+        .filter_map(move |(x, y)| y.contains(DirectionFlags(1 << (x as u8))).then_some(x))
     }
 }
 
 impl From<DirectionFlags> for IVec3 {
     fn from(x: DirectionFlags) -> Self {
-        x.into_iter().fold(IVec3::ZERO, |acc, x| acc + IVec3::from(x))
+        x.into_iter()
+            .fold(IVec3::ZERO, |acc, x| acc + IVec3::from(x))
     }
 }
 
@@ -315,14 +367,14 @@ pub enum Direction {
     /// The -z direction.
     BACK = 4,
     /// The +z direction.
-    FRONT = 5
+    FRONT = 5,
 }
 
 impl Direction {
     /// Creates a new direction from a raw byte.
     ///
     /// # Safety
-    /// 
+    ///
     ///  For this function to be sound, bits must be on the range [0, 5].
     pub const unsafe fn from_raw(bits: u8) -> Self {
         transmute(bits)
@@ -337,15 +389,13 @@ impl Direction {
             Direction::DOWN => ivec3(0, -1, 0),
             Direction::UP => ivec3(0, 1, 0),
             Direction::BACK => ivec3(0, 0, -1),
-            Direction::FRONT => ivec3(0, 0, 1)
+            Direction::FRONT => ivec3(0, 0, 1),
         }
     }
 
     /// Returns the opposite of this direction.
     pub const fn reverse(self) -> Self {
-        unsafe {
-            Self::from_raw((self as u8) ^ 1)
-        }
+        unsafe { Self::from_raw((self as u8) ^ 1) }
     }
 
     /// Returns whether this direction points along a positive axis.
@@ -381,44 +431,36 @@ pub enum Axis {
     /// The y-axis.
     Y = 1,
     /// The z-axis.
-    Z = 2
+    Z = 2,
 }
 
 impl Axis {
     /// Gets the underlying bit representation of this axis.
     pub const fn as_u8(self) -> u8 {
-        unsafe {
-            transmute(self)
-        }
+        unsafe { transmute(self) }
     }
 
     /// Creates a new axis from raw bits.
-    /// 
+    ///
     /// # Safety
-    /// 
+    ///
     /// For this conversion to be sound, the input must be on the range `[0, 2]`.
     pub const unsafe fn from_raw(bits: u8) -> Self {
         transmute(bits)
     }
 
     pub const fn from_direction(value: Direction) -> Self {
-        unsafe {
-            transmute((value as u8) >> 1)
-        }
+        unsafe { transmute((value as u8) >> 1) }
     }
 
     /// Obtains the direction that points toward the negative along this axis.
     pub const fn as_direction_negative(self) -> Direction {
-        unsafe {
-            Direction::from_raw((self as u8) << 1)
-        }
+        unsafe { Direction::from_raw((self as u8) << 1) }
     }
 
     /// Obtains the direction that points toward the positive along this axis.
     pub const fn as_direction_positive(self) -> Direction {
-        unsafe {
-            Direction::from_raw(((self as u8) << 1) | 1)
-        }
+        unsafe { Direction::from_raw(((self as u8) << 1) | 1) }
     }
 }
 
@@ -509,8 +551,18 @@ impl<T> DirectionMap<T> {
     }
 
     /// Creates a new mapping that contains the specified item for every direction.
-    pub fn splat(item: T) -> Self where T: Clone {
-        Self([item.clone(), item.clone(), item.clone(), item.clone(), item.clone(), item])
+    pub fn splat(item: T) -> Self
+    where
+        T: Clone,
+    {
+        Self([
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item,
+        ])
     }
 
     /// Converts an array of `T`, in standard order, into a direction map.
@@ -520,16 +572,12 @@ impl<T> DirectionMap<T> {
 
     /// Gets an immutable reference to the item associated with the specified direction.
     pub fn get(&self, direction: Direction) -> &T {
-        unsafe {
-            self.0.get_unchecked(direction as usize)
-        }
+        unsafe { self.0.get_unchecked(direction as usize) }
     }
 
     /// Gets a mutable reference to the item associated with the specified direction.
     pub fn get_mut(&mut self, direction: Direction) -> &mut T {
-        unsafe {
-            self.0.get_unchecked_mut(direction as usize)
-        }
+        unsafe { self.0.get_unchecked_mut(direction as usize) }
     }
 
     /// Obtains an iterator that loops over all of the items,
@@ -552,7 +600,10 @@ impl<T> DirectionMap<T> {
     }
 
     /// Transforms the items in the map, by reference, into a new map.
-    pub fn map_ref<'a, 'b: 'a, U: 'b, F: FnMut(Direction, &'a T) -> U>(&'a self, mut f: F) -> DirectionMap<U> {
+    pub fn map_ref<'a, 'b: 'a, U: 'b, F: FnMut(Direction, &'a T) -> U>(
+        &'a self,
+        mut f: F,
+    ) -> DirectionMap<U> {
         unsafe {
             DirectionMap([
                 f(Direction::LEFT, self.0.get_unchecked(0)),
@@ -576,10 +627,18 @@ impl<T: Clone> DirectionMap<&T> {
 impl<'a, T> IntoIterator for &'a DirectionMap<T> {
     type Item = (Direction, &'a T);
 
-    type IntoIter = std::iter::Map<std::iter::Enumerate<std::slice::Iter<'a, T>>, fn((usize, &'a T)) -> (Direction, &'a T)>;
+    type IntoIter = std::iter::Map<
+        std::iter::Enumerate<std::slice::Iter<'a, T>>,
+        fn((usize, &'a T)) -> (Direction, &'a T),
+    >;
 
     fn into_iter(self) -> Self::IntoIter {
-        unsafe { self.0.iter().enumerate().map(|(d, reader)| (Direction::from_raw(d as u8), reader)) }
+        unsafe {
+            self.0
+                .iter()
+                .enumerate()
+                .map(|(d, reader)| (Direction::from_raw(d as u8), reader))
+        }
     }
 }
 
@@ -599,14 +658,43 @@ impl<T> IndexMut<Direction> for DirectionMap<T> {
 
 /// Converts from a direction to the four suboctants of an octree which lie on that side of the octree.
 pub const DIRECTION_OCTANT_MAP: DirectionMap<[Octant; 4]> = DirectionMap::from_array([
-    [Octant::Z0Y0X0, Octant::Z0Y1X0, Octant::Z1Y0X0, Octant::Z1Y1X0],
-    [Octant::Z0Y0X1, Octant::Z0Y1X1, Octant::Z1Y0X1, Octant::Z1Y1X1],
-    [Octant::Z0Y0X0, Octant::Z0Y0X1, Octant::Z1Y0X0, Octant::Z1Y0X1],
-    [Octant::Z0Y1X0, Octant::Z0Y1X1, Octant::Z1Y1X0, Octant::Z1Y1X1],
-    [Octant::Z0Y0X0, Octant::Z0Y0X1, Octant::Z0Y1X0, Octant::Z0Y1X1],
-    [Octant::Z1Y0X0, Octant::Z1Y0X1, Octant::Z1Y1X0, Octant::Z1Y1X1]
+    [
+        Octant::Z0Y0X0,
+        Octant::Z0Y1X0,
+        Octant::Z1Y0X0,
+        Octant::Z1Y1X0,
+    ],
+    [
+        Octant::Z0Y0X1,
+        Octant::Z0Y1X1,
+        Octant::Z1Y0X1,
+        Octant::Z1Y1X1,
+    ],
+    [
+        Octant::Z0Y0X0,
+        Octant::Z0Y0X1,
+        Octant::Z1Y0X0,
+        Octant::Z1Y0X1,
+    ],
+    [
+        Octant::Z0Y1X0,
+        Octant::Z0Y1X1,
+        Octant::Z1Y1X0,
+        Octant::Z1Y1X1,
+    ],
+    [
+        Octant::Z0Y0X0,
+        Octant::Z0Y0X1,
+        Octant::Z0Y1X0,
+        Octant::Z0Y1X1,
+    ],
+    [
+        Octant::Z1Y0X0,
+        Octant::Z1Y0X1,
+        Octant::Z1Y1X0,
+        Octant::Z1Y1X1,
+    ],
 ]);
-
 
 /// Provides a way to map between Cartesian octants and another type.
 #[derive(Copy, Clone, Debug, Default)]
@@ -624,8 +712,20 @@ impl<T> OctantMap<T> {
     }
 
     /// Creates a new mapping that contains the specified item for every octant.
-    pub fn splat(item: T) -> Self where T: Clone {
-        Self([item.clone(), item.clone(), item.clone(), item.clone(), item.clone(), item.clone(), item.clone(), item])
+    pub fn splat(item: T) -> Self
+    where
+        T: Clone,
+    {
+        Self([
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item.clone(),
+            item,
+        ])
     }
 
     /// Converts an array of `T`, in standard order, into an octant map.
@@ -635,16 +735,12 @@ impl<T> OctantMap<T> {
 
     /// Gets an immutable reference to the item associated with the specified octant.
     pub fn get(&self, octant: Octant) -> &T {
-        unsafe {
-            self.0.get_unchecked(octant as usize)
-        }
+        unsafe { self.0.get_unchecked(octant as usize) }
     }
 
     /// Gets a mutable reference to the item associated with the specified octant.
     pub fn get_mut(&mut self, octant: Octant) -> &mut T {
-        unsafe {
-            self.0.get_unchecked_mut(octant as usize)
-        }
+        unsafe { self.0.get_unchecked_mut(octant as usize) }
     }
 
     /// Obtains an iterator that loops over all of the items,
@@ -669,7 +765,10 @@ impl<T> OctantMap<T> {
     }
 
     /// Transforms the items in the map, by reference, into a new map.
-    pub fn map_ref<'a, 'b: 'a, U: 'b, F: FnMut(Octant, &'a T) -> U>(&'a self, mut f: F) -> OctantMap<U> {
+    pub fn map_ref<'a, 'b: 'a, U: 'b, F: FnMut(Octant, &'a T) -> U>(
+        &'a self,
+        mut f: F,
+    ) -> OctantMap<U> {
         unsafe {
             OctantMap([
                 f(Octant::Z0Y0X0, self.0.get_unchecked(0)),
@@ -695,10 +794,18 @@ impl<T: Clone> OctantMap<&T> {
 impl<'a, T> IntoIterator for &'a OctantMap<T> {
     type Item = (Octant, &'a T);
 
-    type IntoIter = std::iter::Map<std::iter::Enumerate<std::slice::Iter<'a, T>>, fn((usize, &'a T)) -> (Octant, &'a T)>;
+    type IntoIter = std::iter::Map<
+        std::iter::Enumerate<std::slice::Iter<'a, T>>,
+        fn((usize, &'a T)) -> (Octant, &'a T),
+    >;
 
     fn into_iter(self) -> Self::IntoIter {
-        unsafe { self.0.iter().enumerate().map(|(d, reader)| (Octant::from_raw(d as u8), reader)) }
+        unsafe {
+            self.0
+                .iter()
+                .enumerate()
+                .map(|(d, reader)| (Octant::from_raw(d as u8), reader))
+        }
     }
 }
 

@@ -13,13 +13,13 @@ pub enum Asset {
         /// The raw bytes of the image.
         data: Vec<u8>,
         /// The format of the image.
-        format: ImageFormat
+        format: ImageFormat,
     },
     /// A text-based file.
     Text {
         /// The text within this document.
-        value: String
-    }
+        value: String,
+    },
 }
 
 /// Describes the format of an image.
@@ -29,7 +29,7 @@ pub enum ImageFormat {
     /// The image is encoded as a JPEG.
     Jpeg,
     /// The image is encoded as a PNG.
-    Png
+    Png,
 }
 
 /// Allows for loading and using embedded assets.
@@ -47,14 +47,17 @@ impl dyn AssetManager {
     #[cfg(feature = "toml")]
     pub fn get_from_toml<T: 'static + serde::de::DeserializeOwned>(&self, id: AssetId) -> T {
         match self.try_get_raw(id).expect("Failed to get asset.") {
-            Asset::Text { value } => toml::from_str(&value).expect("Failed to deserialize TOML map."),
-            x => panic!("Expected text asset; got {x:?}")
+            Asset::Text { value } => {
+                toml::from_str(&value).expect("Failed to deserialize TOML map.")
+            }
+            x => panic!("Expected text asset; got {x:?}"),
         }
     }
 
     /// Shorthand for `try_get_ui_texture(id).unwrap()`.
     pub fn get_ui_texture(&self, id: AssetId) -> UiTextureIndex {
-        self.try_get_ui_texture(id).expect("Failed to load image asset.")
+        self.try_get_ui_texture(id)
+            .expect("Failed to load image asset.")
     }
 }
 
@@ -68,7 +71,7 @@ pub struct UiTextureIndex {
     /// The width of the texture.
     pub width: f32,
     /// The height of the texture.
-    pub height: f32
+    pub height: f32,
 }
 
 #[cfg(feature = "egui")]
@@ -76,7 +79,10 @@ impl<'a> From<UiTextureIndex> for egui_wings::egui::ImageSource<'a> {
     fn from(value: UiTextureIndex) -> Self {
         Self::Texture(egui_wings::egui::load::SizedTexture {
             id: egui_wings::egui::TextureId::User(value.id),
-            size: egui_wings::egui::Vec2 { x: value.width, y: value.height }
+            size: egui_wings::egui::Vec2 {
+                x: value.width,
+                y: value.height,
+            },
         })
     }
 }

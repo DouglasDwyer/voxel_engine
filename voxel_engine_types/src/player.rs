@@ -17,7 +17,7 @@ pub trait Player: 'static {
 
     /// Gets the player's current transform.
     fn get_transform(&self) -> Transform;
-    
+
     /// Places some voxels at the given world position. The voxel shape
     /// changes based upon index.
     /// The edit occurs at the end of the current frame.
@@ -38,5 +38,5 @@ pub struct DragEntity {
     /// The ID of the object.
     pub id: u64,
     /// The position to which the object should be dragged.
-    pub target_position: WorldVec
+    pub target_position: WorldVec,
 }

@@ -10,7 +10,7 @@ pub struct Ray {
     /// The starting point of the ray in world space.
     pub position: WorldVec,
     /// The maximum distance that the ray may travel.
-    pub max_distance: f32
+    pub max_distance: f32,
 }
 
 /// Indicates that a ray intersected with voxel geometry.
@@ -26,7 +26,7 @@ pub struct RaycastHit {
     /// [`RaycastObject::World`], then this coordinate corresponds to a world-space position.
     /// If the object was a [`RaycastObject::Entity`], then this coordinate corresponds to
     /// that voxel index on the entity.
-    pub voxel: IVec3
+    pub voxel: IVec3,
 }
 
 /// An object that was hit during a ray query.
@@ -38,7 +38,7 @@ pub enum RaycastObject {
         id: u64,
     },
     /// The main voxel grid was hit.
-    World { }
+    World {},
 }
 
 /// Determines the intersection between rays in the world and voxel objects.

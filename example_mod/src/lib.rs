@@ -1,8 +1,8 @@
 use egui_demo_lib::*;
 use serde::*;
-use voxel_engine::*;
 use voxel_engine::asset::*;
 use voxel_engine::egui::*;
+use voxel_engine::*;
 use wings::*;
 
 include_assets!("example_mod/assets");
@@ -16,7 +16,7 @@ pub struct HelloClient {
     /// The context handle.
     ctx: WingsContextHandle<Self>,
     /// The widget gallery window.
-    widget_gallery: WidgetGallery
+    widget_gallery: WidgetGallery,
 }
 
 impl HelloClient {
@@ -28,18 +28,15 @@ impl HelloClient {
 }
 
 impl WingsSystem for HelloClient {
-    const DEPENDENCIES: Dependencies = dependencies()
-        .with::<dyn AssetManager>()
-        .with::<dyn Egui>();
+    const DEPENDENCIES: Dependencies = dependencies().with::<dyn AssetManager>().with::<dyn Egui>();
 
-    const EVENT_HANDLERS: EventHandlers<Self> = event_handlers()
-        .with(Self::draw_ui);
+    const EVENT_HANDLERS: EventHandlers<Self> = event_handlers().with(Self::draw_ui);
 
     fn new(ctx: WingsContextHandle<Self>) -> Self {
         println!("Hello client!");
         Self {
             ctx,
-            widget_gallery: WidgetGallery::default()
+            widget_gallery: WidgetGallery::default(),
         }
     }
 }
@@ -50,11 +47,14 @@ impl WingsSystem for HelloClient {
 pub struct HelloServer;
 
 impl WingsSystem for HelloServer {
-    const DEPENDENCIES: Dependencies = dependencies()
-        .with::<dyn AssetManager>();
+    const DEPENDENCIES: Dependencies = dependencies().with::<dyn AssetManager>();
 
     fn new(ctx: WingsContextHandle<Self>) -> Self {
-        println!("Hello server! {:?}", ctx.get::<dyn AssetManager>().get_from_toml::<MyConfig>(assets::MY_CONFIG));
+        println!(
+            "Hello server! {:?}",
+            ctx.get::<dyn AssetManager>()
+                .get_from_toml::<MyConfig>(assets::MY_CONFIG)
+        );
         Self
     }
 }
@@ -65,5 +65,5 @@ struct MyConfig {
     /// A string option
     pub hello: String,
     /// A boolean option
-    pub is_true: bool
+    pub is_true: bool,
 }

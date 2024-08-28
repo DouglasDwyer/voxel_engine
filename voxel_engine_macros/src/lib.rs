@@ -11,7 +11,10 @@ use wasset::*;
 /// A set of modules is generated containing the IDs of each asset.
 #[proc_macro]
 pub fn include_assets(path: TokenStream) -> TokenStream {
-    wasset::include_assets::<VoxelAssetEncoder>(path, &quote::quote! { ::voxel_engine::asset::AssetId })
+    wasset::include_assets::<VoxelAssetEncoder>(
+        path,
+        &quote::quote! { ::voxel_engine::asset::AssetId },
+    )
 }
 
 /// Serializes voxel-engine related assets to the [`Asset`] type.
@@ -20,14 +23,24 @@ struct VoxelAssetEncoder;
 impl AssetEncoder for VoxelAssetEncoder {
     type Target = Asset;
 
-    fn encode(extension: &str, _: &Table, data: Vec<u8>) -> Result<Option<Self::Target>, WassetError> {
+    fn encode(
+        extension: &str,
+        _: &Table,
+        data: Vec<u8>,
+    ) -> Result<Option<Self::Target>, WassetError> {
         match extension {
-            "jpg" | "jpeg" => Ok(Some(Asset::Image { data, format: ImageFormat::Jpeg })),
-            "png" => Ok(Some(Asset::Image { data, format: ImageFormat::Png })),
-            "toml" | "txt" => Ok(Some(Asset::Text {
-                value: String::from_utf8(data).map_err(WassetError::from_serialize)?
+            "jpg" | "jpeg" => Ok(Some(Asset::Image {
+                data,
+                format: ImageFormat::Jpeg,
             })),
-            _ => Ok(None)
+            "png" => Ok(Some(Asset::Image {
+                data,
+                format: ImageFormat::Png,
+            })),
+            "toml" | "txt" => Ok(Some(Asset::Text {
+                value: String::from_utf8(data).map_err(WassetError::from_serialize)?,
+            })),
+            _ => Ok(None),
         }
     }
 }
