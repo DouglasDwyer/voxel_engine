@@ -2,6 +2,10 @@
 name = "voxel_engine_types"
 edition.workspace = true
 version.workspace = true
+description.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
 
 [dependencies]
 bytemuck.workspace = true

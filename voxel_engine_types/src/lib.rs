@@ -1,3 +1,5 @@
+//! Implements types for the [`voxel_engine`](https://crates.io/crates/voxel_engine) crate.
+
 use serde::*;
 use wings::*;
 

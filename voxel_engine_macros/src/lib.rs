@@ -1,3 +1,5 @@
+//! Implements macros for the [`voxel_engine`](https://crates.io/crates/voxel_engine) crate.
+
 extern crate proc_macro;
 
 use proc_macro::*;

@@ -27,7 +27,7 @@ pub trait Input: 'static {
 	fn pointer_locked(&self) -> bool;
 	
 	/// Sets whether the mouse cursor will be invisible and locked to the center of the screen.
-	/// The user's mouse movements can then be read with [`Self::get_pointer_delta`].
+	/// The user's mouse movements can then be read with [`Self::pointer_delta`].
 	fn set_pointer_locked(&mut self, locked: bool);
 
 	/// Gets the number of ticks that the mouse wheel has scrolled

@@ -9,6 +9,11 @@ resolver = "2"
 [workspace.package]
 edition = "2021"
 version = "0.1.0"
+description = "Public API for the octo voxel game engine"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/DouglasDwyer/voxel_engine"
+
 
 [workspace.dependencies]
 # Internal dependencies
@@ -32,6 +37,10 @@ wings = { version = "0.1.5", default-features = false }
 name = "voxel_engine"
 edition.workspace = true
 version.workspace = true
+description.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
 
 [dependencies]
 egui_wings = { workspace = true, optional = true }
@@ -39,5 +48,11 @@ voxel_engine_macros.workspace = true
 voxel_engine_types.workspace = true
 
 [features]
+# Enables drawing UI with `egui`
 egui = [ "dep:egui_wings", "voxel_engine_types/egui" ]
+
+# Enables reading config TOML files using the `toml` crate
 toml = [ "voxel_engine_types/toml" ]
+
+[package.metadata."docs.rs"]
+all-features = true
