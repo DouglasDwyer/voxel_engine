@@ -44,6 +44,7 @@ instantiate_systems!(Client, [HelloClient]);
 
 /// A system that will print out the frame
 /// time each frame.
+#[export_system]
 struct HelloClient {
     /// The context handle.
     ctx: WingsContextHandle<Self>
@@ -65,7 +66,7 @@ impl WingsSystem for HelloClient {
 
     fn new(ctx: WingsContextHandle<Self>) -> Self {
         println!("Hello client!");
-        Self
+        Self { ctx }
     }
 }
 

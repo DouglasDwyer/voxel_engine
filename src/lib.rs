@@ -39,6 +39,7 @@
 //!
 //! /// A system that will print out the frame
 //! /// time each frame.
+//! #[export_system]
 //! struct HelloClient {
 //!     /// The context handle.
 //!     ctx: WingsContextHandle<Self>
@@ -60,7 +61,7 @@
 //!
 //!     fn new(ctx: WingsContextHandle<Self>) -> Self {
 //!         println!("Hello client!");
-//!         Self
+//!         Self { ctx }
 //!     }
 //! }
 //!
